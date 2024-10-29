@@ -1,15 +1,14 @@
-# Unichat Application
+# Simple Chatting Application
 
-![Chat Application](https://i.ibb.co/GJwyy9m/Bv9-Js3-QLOLY-HD.jpg)
+
 
 ## Introduction
 
-This is a code repository for the corresponding video tutorial. In this video, we create a full Realtime Chat Application with Social Auth and dedicated chat APIs/sockets.
+I create a Realtime Chat Application with Firebase (Authentication/Realtime Database).
 
-You will learn how to build a react chat app using [https://chatengine.io](https://chatengine.io)
+First thing in mind is to create a react chat app using [https://chatengine.io](https://chatengine.io) but somehow, chatengine no longer supports new user (I could not find signup/register section on their website ?!)
 
-Firebase and Chat Engine are greats tools to setup apps fast and easily - great to learn with!
+So, Firebase is also greats tools as alternative to setup apps fast and easily - great to learn with!
 
-### Bonus - E-mail notifications
+### Detail explanation
 
-If you want to upgrade this chat application even further than what is shown in the video, you can add e-mail notifications. More info on https://chatengine.io/docs/email_notifications.
