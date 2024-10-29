@@ -27,7 +27,54 @@ const Chat = () => {
           <img src="./info.png" alt="" />
         </div>
       </div>
-      <div className="center"></div>
+      <div className="center">
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. At,
+              eaque nemo aperiam impedit dolorum cupiditate sunt quasi
+              asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
+              cupiditate tenetur ipsum vero?
+            </p>
+          </div>
+          <span>1 min ago</span>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. At,
+              eaque nemo aperiam impedit dolorum cupiditate sunt quasi
+              asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
+              cupiditate tenetur ipsum vero?
+            </p>
+          </div>
+          <span>1 min ago</span>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. At,
+              eaque nemo aperiam impedit dolorum cupiditate sunt quasi
+              asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
+              cupiditate tenetur ipsum vero?
+            </p>
+          </div>
+          <span>1 min ago</span>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. At,
+              eaque nemo aperiam impedit dolorum cupiditate sunt quasi
+              asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
+              cupiditate tenetur ipsum vero?
+            </p>
+          </div>
+          <span>1 min ago</span>
+        </div>
+      </div>
       <div className="bottom">
         <div className="icons">
           <img src="./img.png" alt="" />

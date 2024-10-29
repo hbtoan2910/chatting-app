@@ -56,6 +56,32 @@
   .center {
     flex: 1;
     padding: 20px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .message {
+      max-width: 70%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      &.own {
+        align-self: flex-end;
+
+        .texts {
+          p {
+            background-color: #5183fe;
+          }
+        }
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
   .bottom {
     display: flex;
