@@ -6,6 +6,12 @@ const Chat = () => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
 
+  const endRef = useRef(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji);
     setOpen(false);
@@ -36,8 +42,8 @@ const Chat = () => {
               asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
               cupiditate tenetur ipsum vero?
             </p>
+            <span>1 min ago</span>
           </div>
-          <span>1 min ago</span>
         </div>
         <div className="message">
           <img src="./avatar.png" alt="" />
@@ -48,19 +54,23 @@ const Chat = () => {
               asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
               cupiditate tenetur ipsum vero?
             </p>
+            <span>1 min ago</span>
           </div>
-          <span>1 min ago</span>
         </div>
         <div className="message own">
           <div className="texts">
+            <img
+              src="https://images.pexels.com/photos/20780458/pexels-photo-20780458/free-photo-of-honda-super-cub-motorbike.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
             <p>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. At,
               eaque nemo aperiam impedit dolorum cupiditate sunt quasi
               asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
               cupiditate tenetur ipsum vero?
             </p>
+            <span>1 min ago</span>
           </div>
-          <span>1 min ago</span>
         </div>
         <div className="message">
           <img src="./avatar.png" alt="" />
@@ -71,9 +81,10 @@ const Chat = () => {
               asperiores nam vero ipsa numquam nobis. Aspernatur tempore ratione
               cupiditate tenetur ipsum vero?
             </p>
+            <span>1 min ago</span>
           </div>
-          <span>1 min ago</span>
         </div>
+        <div ref={endRef} />
       </div>
       <div className="bottom">
         <div className="icons">
