@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./login.css";
 import { toast } from "react-toastify";
 import {
@@ -7,7 +7,6 @@ import {
 } from "firebase/auth";
 import { auth, db, storage } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import upload from "../../lib/upload";
 
 const Login = () => {
@@ -15,6 +14,8 @@ const Login = () => {
     file: null,
     url: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
@@ -25,12 +26,13 @@ const Login = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(e.target);
     const { username, email, password } = Object.fromEntries(formData);
+
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
       const imgUrl = await upload(avatar.file);
 
       await setDoc(doc(db, "users", res.user.uid), {
@@ -49,10 +51,15 @@ const Login = () => {
     } catch (err) {
       console.log(err);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
-  const handleSignIn = async (e) => {
+
+  const handleLogIn = async (e) => {
     e.preventDefault(); //prevent page reloading after submitting the form
+    setLoading(true);
+
     const formData = new FormData(e.target);
     const { email, password } = Object.fromEntries(formData);
 
@@ -63,20 +70,33 @@ const Login = () => {
         password
       );
       //console.log("Logged in user:", userCredential.user);
-      toast.success("User logged in properly.");
-    } catch (error) {
-      console.error("Error logging in:", error.message);
+      toast.success(`User with email ${email} logged in properly.`);
+    } catch (err) {
+      console.error("Error logging in:", err.message);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="login">
       <div className="item">
         <h2>Welcome back,</h2>
 
-        <form onSubmit={handleSignIn}>
+        <form onSubmit={handleLogIn}>
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={false}>Sign in</button>
+          <button disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner" />
+                <span>loading</span>
+              </>
+            ) : (
+              "Sign in"
+            )}
+          </button>
         </form>
       </div>
 
@@ -99,7 +119,16 @@ const Login = () => {
           <input type="text" placeholder="Username" name="username" />
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={false}>Sign up</button>
+          <button disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner" />
+                <span>loading</span>
+              </>
+            ) : (
+              "Sign up"
+            )}
+          </button>
         </form>
       </div>
     </div>

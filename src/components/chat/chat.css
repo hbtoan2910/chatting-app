@@ -37,7 +37,7 @@
 
         p {
           font-size: 14px;
-          font-weight: 300;
+          font-weight: 600;
           color: #a5a5a5;
         }
       }
@@ -97,7 +97,7 @@
 
         p {
           padding: 20px;
-          background-color: rgba(17, 25, 40, 0.3);
+          background-color: rgba(250, 94, 190, 0.8);
           border-radius: 10px;
         }
 

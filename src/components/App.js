@@ -1,23 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-import { AuthProvider } from "../contexts/AuthContext";
 import List from "./list/List";
 import Detail from "./detail/Detail";
 import Chat from "./chat/Chat";
 import Login from "./login/Login";
 import Notification from "./notification/Notification";
+import { auth } from "../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import useUserStore from "../lib/userStore";
+import useChatStore from "../lib/chatStore";
 
 function App() {
-  const user = false;
+  const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+  const { chatId } = useChatStore();
+
+  useEffect(() => {
+    const unSub = onAuthStateChanged(auth, (user) => {
+      fetchUserInfo(user?.uid);
+    });
+
+    return () => {
+      unSub();
+    };
+  }, [fetchUserInfo]);
+
+  if (isLoading) return <div className="loading">loading...</div>;
 
   return (
     <div className="container">
-      {user ? (
+      {currentUser ? (
         <>
           <List />
-          <Chat />
-          <Detail />
+          {chatId && <Chat />}
+          {chatId && <Detail />}
         </>
       ) : (
         <Login />

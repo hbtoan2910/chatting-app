@@ -3,9 +3,18 @@ import { storage } from "./firebase";
 
 const upload = async (file) => {
   // Get current timestamp in YYYYMMDD_HHmmss format, using Date.now() will provide a unique number-based timestamp that’s quicker but less readable
-  const timestamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0];
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
 
-  const storageRef = ref(storage, `avatars/${timestamp}_${file.name}`);
+  // Format the timestamp
+  const formattedTimestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+
+  const storageRef = ref(storage, `avatars/${formattedTimestamp}_${file.name}`);
 
   const uploadTask = uploadBytesResumable(storageRef, file);
 
