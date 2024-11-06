@@ -20,7 +20,7 @@ In the app, we use 3 key services of Firebase which are:
 
 #### 2/ import { getFirestore } from "firebase/firestore"; //use Firestore Database service (for structured data: RealTime data storage like user info/chat message..)
 
-Within this, MUST use onSnapshot() function for a REAL TIME listener on a specific collection (in this app, collections are: 'userchats' and 'chats'
+Within this, MUST use onSnapshot() function for a REAL TIME listener on a specific collection (in this app, collections are: 'userchats' and 'chats')
 
 ![image](https://github.com/user-attachments/assets/e14761eb-a714-458c-b945-59273221966c)
 
