@@ -18,7 +18,8 @@ const Chat = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState([]);
   const { currentUser } = useUserStore();
-  const { chatId, user } = useChatStore();
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore();
   const [img, setImg] = useState({
     file: null,
     url: "",
@@ -63,7 +64,9 @@ const Chat = () => {
           senderId: currentUser.id,
           text,
           createdAt: new Date(),
-          ...(imgUrl && { img: imgUrl }), //If imgUrl is not null or undefined (meaning an image URL exists), { img: imgUrl } is created and spread into the object, adding an img property with the image URL
+          ...(imgUrl && { img: imgUrl }),
+          //If imgUrl is not null or undefined (meaning an image URL exists), { img: imgUrl } is created and spread into the object, adding an img property with the image URL
+          //The spread operator (...) is necessary in this case because we cannot directly use conditional syntax in object literal notation without it. JavaScript object literals do not support inline conditional properties directly.
         }),
       });
 
@@ -217,7 +220,12 @@ const Chat = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Type a message..."
+          placeholder={
+            isCurrentUserBlocked || isReceiverBlocked
+              ? "You cannot send a message"
+              : "Type a message..."
+          }
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
         <div className="emoji">
           <img
@@ -231,7 +239,11 @@ const Chat = () => {
             <EmojiPicker open={open} onEmojiClick={handleEmoji} />
           </div>
         </div>
-        <button className="sendButton" onClick={handleSend}>
+        <button
+          className="sendButton"
+          onClick={handleSend}
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
+        >
           Send
         </button>
       </div>

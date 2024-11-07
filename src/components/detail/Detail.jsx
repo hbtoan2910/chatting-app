@@ -9,8 +9,13 @@ const Detail = () => {
   const { user, changeBlock } = useChatStore();
 
   const handleBlock = () => {
+    if (!user) return;
+    try {
+    } catch (err) {
+      console.log(err);
+    }
     changeBlock();
-    console.log(useChatStore.getState());
+    //console.log(useChatStore.getState());
   };
 
   const handleLogOut = () => {
@@ -23,8 +28,8 @@ const Detail = () => {
   return (
     <div className="detail">
       <div className="user">
-        <img src={user.avatar} alt="user-avatar" />
-        <h2>{user.username}</h2>
+        <img src={user?.avatar || "./avatar.png"} alt="user-avatar" />
+        <h2>{user?.username}</h2>
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
       <div className="info">
@@ -52,7 +57,7 @@ const Detail = () => {
             <img src="./arrowDown.png" alt="" />
           </div>
           <div className="photos">
-            <div className="photoItem">
+            {/* <div className="photoItem">
               <div className="photoDetail">
                 <img
                   src="https://images.pexels.com/photos/7381200/pexels-photo-7381200.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
@@ -91,7 +96,8 @@ const Detail = () => {
                 <span>photo_2024_2.png</span>
               </div>
               <img src="./download.png" alt="" className="icon" />
-            </div>
+            </div> */}
+            {}
           </div>
         </div>
         <div className="option">
