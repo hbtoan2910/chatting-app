@@ -147,6 +147,10 @@
     .emoji {
       position: relative;
 
+      img:hover {
+        transform: scale(1.1) rotate(20deg); /* Scale and rotate */
+      }
+
       .picker {
         position: absolute;
         bottom: 50px;
@@ -162,6 +166,10 @@
       border-radius: 5px;
       outline: none;
       cursor: pointer;
+
+      &:hover {
+        background-color: #5e8bfa;
+      }
 
       &:disabled {
         background-color: #5e8bfa;

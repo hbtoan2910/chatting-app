@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react";
 
 const Detail = () => {
+  const [displayPhotos, setDisplayPhotos] = useState(false);
   const { currentUser } = useUserStore();
   const { chatId, user, changeBlock, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
@@ -69,18 +70,24 @@ const Detail = () => {
   };
   const handleDownload = async (url) => {
     try {
+      console.log(url);
       const response = await fetch(url); // Fetch the file
       const blob = await response.blob(); // Convert the response to a Blob
       const objectURL = URL.createObjectURL(blob); // Create a temporary object URL
-
+      console.log(objectURL);
       const link = document.createElement("a");
       link.href = objectURL; // Use the object URL
       link.download = getFileNameFromFirebaseUrl(url); // Set the file name
+      console.log(link);
       link.click(); // Trigger the download
       URL.revokeObjectURL(objectURL); // Clean up the object URL
     } catch (error) {
       console.error("Download failed:", error);
     }
+  };
+
+  const togglePhotos = () => {
+    setDisplayPhotos((prev) => !prev);
   };
   return (
     <div className="detail">
@@ -111,9 +118,16 @@ const Detail = () => {
         <div className="option">
           <div className="title">
             <span>Shared photos</span>
-            <img src="./arrowDown.png" alt="" />
+            <img
+              src={displayPhotos ? "./arrowDown.png" : "/arrowUp.png"}
+              alt=""
+              onClick={() => togglePhotos()}
+            />
           </div>
-          <div className="photos">
+          <div
+            className="photos"
+            style={{ display: displayPhotos ? "block" : "none" }}
+          >
             {/* <div className="photoItem">
               <div className="photoDetail">
                 <img
@@ -177,6 +191,8 @@ const Detail = () => {
             <img src="./arrowUp.png" alt="" />
           </div>
         </div>
+      </div>
+      <div className="bottom-btn">
         <button onClick={() => handleBlock()}>
           {isCurrentUserBlocked
             ? "You are blocked!"
