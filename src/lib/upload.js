@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./firebase";
 
-const upload = async (file) => {
+const upload = async (file, folderName) => {
   // Get current timestamp in YYYYMMDD_HHmmss format, using Date.now() will provide a unique number-based timestamp that’s quicker but less readable
   const now = new Date();
   const year = now.getFullYear();
@@ -14,7 +14,10 @@ const upload = async (file) => {
   // Format the timestamp
   const formattedTimestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
 
-  const storageRef = ref(storage, `avatars/${formattedTimestamp}_${file.name}`);
+  const storageRef = ref(
+    storage,
+    `${folderName}/${formattedTimestamp}_${file.name}`
+  );
 
   const uploadTask = uploadBytesResumable(storageRef, file);
 

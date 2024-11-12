@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, db, storage } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 
@@ -25,7 +25,7 @@ const Login = () => {
   };
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //prevent page reloading after submitting the form
     setLoading(true);
 
     const formData = new FormData(e.target);
@@ -33,7 +33,7 @@ const Login = () => {
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      const imgUrl = await upload(avatar.file);
+      const imgUrl = await upload(avatar.file, "avatars");
 
       await setDoc(doc(db, "users", res.user.uid), {
         username,
@@ -69,7 +69,9 @@ const Login = () => {
         email,
         password
       );
-      //console.log("Logged in user:", userCredential.user);
+      // auth object comes from Firebase Authentication, and it automatically manages the user's authentication state,
+      // including storing session-related data in the browser's storage (typically in localStorage or sessionStorage).
+
       toast.success(`User with email ${email} logged in properly.`);
     } catch (err) {
       console.error("Error logging in:", err.message);
@@ -84,7 +86,7 @@ const Login = () => {
       <div className="item">
         <h2>Welcome back,</h2>
 
-        <form onSubmit={handleLogIn}>
+        <form id="loginForm" onSubmit={handleLogIn}>
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
           <button disabled={loading}>
@@ -105,7 +107,7 @@ const Login = () => {
       <div className="item">
         <h2>Create an Account</h2>
 
-        <form onSubmit={handleRegister}>
+        <form id="registerForm" onSubmit={handleRegister}>
           <label htmlFor="file">
             <img src={avatar.url || "./avatar.png"} alt="" />
             Upload an image

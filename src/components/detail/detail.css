@@ -25,6 +25,7 @@
     padding: 20px;
     flex-direction: column;
     gap: 20px;
+    overflow-y: auto; /* Allow scrolling for overflowing content */
 
     .option {
       display: flex;
@@ -101,6 +102,33 @@
         border-radius: 10px; /* Rounded corners */
       }
       .photos::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1); /* Track color */
+        border-radius: 10px; /* Rounded corners */
+      }
+
+      .files {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+        height: 200px;
+        overflow-y: scroll;
+
+        .fileItem {
+          display: flex;
+          flex-direction: column;
+          padding: 5px 0;
+        }
+      }
+      .files::-webkit-scrollbar {
+        width: 10px; /* Slim horizontal scrollbar */
+        height: 10px; /* Slim vertical scrollbar */
+      }
+      .files::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.4); /* Thumb color */
+        border-radius: 10px; /* Rounded corners */
+      }
+      .files::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.1); /* Track color */
         border-radius: 10px; /* Rounded corners */
       }

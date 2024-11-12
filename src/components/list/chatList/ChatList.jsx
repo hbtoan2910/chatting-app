@@ -6,6 +6,7 @@ import useUserStore from "../../../lib/userStore";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import useChatStore from "../../../lib/chatStore";
+import { Tooltip } from "react-tooltip";
 
 const ChatList = () => {
   const [addMode, setAddMode] = useState(false);
@@ -77,9 +78,13 @@ const ChatList = () => {
         <img
           src={addMode ? "./minus.png" : "./plus.png"}
           alt=""
+          data-tooltip-id="add"
+          data-tooltip-content="Add a user to start conversation"
+          data-tooltip-place="top"
           className="add"
           onClick={() => setAddMode((prev) => !prev)}
         />
+        <Tooltip id="add" />
       </div>
 
       {/* <div className="item">

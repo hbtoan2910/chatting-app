@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import List from "./list/List";
 import Detail from "./detail/Detail";
 import Chat from "./chat/Chat";
@@ -27,8 +32,9 @@ function App() {
   if (isLoading) return <div className="loading">loading...</div>;
 
   return (
-    <div className="container">
-      {currentUser ? (
+    <Router>
+      <div className="container">
+        {/* {currentUser ? (
         <>
           <List />
           {chatId && <Chat />}
@@ -37,8 +43,31 @@ function App() {
       ) : (
         <Login />
       )}
-      <Notification />
-    </div>
+      <Notification /> */}
+        <Switch>
+          {/* Redirect to /chat after login if chatId exists */}
+          <Route path="/" exact>
+            {currentUser ? <Redirect to="/chat" /> : <Login />}
+          </Route>
+          {/* Route for /chat page */}
+          <Route path="/chat">
+            {currentUser ? (
+              <>
+                <List />
+                {chatId && <Chat />}
+                {chatId && <Detail />}
+              </>
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+        </Switch>
+        <Notification />
+      </div>
+    </Router>
   );
 }
 

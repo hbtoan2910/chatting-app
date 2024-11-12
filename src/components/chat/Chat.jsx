@@ -1,4 +1,5 @@
 import EmojiPicker from "emoji-picker-react";
+import { toast } from "react-toastify";
 import "./chat.css";
 import { useState, useEffect, useRef } from "react";
 import useUserStore from "../../lib/userStore";
@@ -12,6 +13,8 @@ import {
 import { db } from "../../lib/firebase";
 import useChatStore from "../../lib/chatStore";
 import upload from "../../lib/upload";
+import { Tooltip } from "react-tooltip";
+import { format } from "timeago.js";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -20,16 +23,17 @@ const Chat = () => {
   const { currentUser } = useUserStore();
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
-  const [img, setImg] = useState({
-    file: null,
-    url: "",
-  });
+  // const [img, setImg] = useState({
+  //   file: null,
+  //   url: "",
+  // });
+  const [fileData, setFileData] = useState(null);
 
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [chat]);
 
   useEffect(() => {
     if (!chatId) return; // Return early if chatId is null or undefined
@@ -50,13 +54,18 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if (text === "") return;
-
-    let imgUrl = null;
+    if (text === "") {
+      toast.warning("You have to enter message.");
+      return;
+    }
+    let fileUrl = null;
 
     try {
-      if (img.file) {
-        imgUrl = await upload(img.file);
+      if (fileData) {
+        const folderName = fileData?.type.startsWith("image/")
+          ? "avatars"
+          : "files";
+        fileUrl = await upload(fileData.file, folderName);
       }
 
       await updateDoc(doc(db, "chats", chatId), {
@@ -64,7 +73,13 @@ const Chat = () => {
           senderId: currentUser.id,
           text,
           createdAt: new Date(),
-          ...(imgUrl && { img: imgUrl }),
+          ...(fileData?.type.startsWith("image/") && { img: fileUrl }),
+          ...(fileData &&
+            !fileData.type.startsWith("image/") && {
+              file: fileUrl,
+              fileName: fileData.name,
+            }),
+          //...(imgUrl && { img: imgUrl }),
           //If imgUrl is not null or undefined (meaning an image URL exists), { img: imgUrl } is created and spread into the object, adding an img property with the image URL
           //The spread operator (...) is necessary in this case because we cannot directly use conditional syntax in object literal notation without it. JavaScript object literals do not support inline conditional properties directly.
         }),
@@ -96,21 +111,53 @@ const Chat = () => {
         }
       });
       setText("");
-      setImg({ file: null, url: "" });
+      setFileData(null);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleImg = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImg({
-        file,
-        url: URL.createObjectURL(file),
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
+  // const handleImg = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImg({
+  //       file,
+  //       url: URL.createObjectURL(file),
+  //     });
+  //   }
+  // };
+
+  const handleFile = (e) => {
+    const selectedFile = e.target.files[0];
+    const maxSizeInMB = 20; // Maximum file size in MB
+    const maxSizeInKB = maxSizeInMB * 1024; // Maximum file size in KB
+
+    if (selectedFile) {
+      const fileSizeInKB = (selectedFile.size / 1024).toFixed(2); // Convert size to KB
+      if (fileSizeInKB > maxSizeInKB) {
+        toast.warning(
+          "File size must be below 20MB. Please choose a smaller file."
+        );
+        e.target.value = ""; // Reset the file input
+        return;
+      }
+
+      setFileData({
+        file: selectedFile,
+        url: URL.createObjectURL(selectedFile),
+        name: selectedFile.name,
+        type: selectedFile.type,
+        size: (selectedFile.size / 1024).toFixed(2), //in Kb
       });
     }
   };
+
   return (
     <div className="chat">
       <div className="top">
@@ -187,16 +234,47 @@ const Chat = () => {
           >
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
+              {message.file && (
+                <a
+                  style={{ color: "black", fontStyle: "italic" }}
+                  href={message.file}
+                  download={message.fileName}
+                >
+                  {message.fileName}
+                </a>
+              )}
               <p>{message.text}</p>
-              {/* <span>1 min ago</span> */}
+              <span>{format(message.createdAt.toDate())}</span>
+              {/* The reason message.createdAt.toDate() works in this code is because createdAt is likely a Firestore Timestamp object, not a native JavaScript Date */}
             </div>
           </div>
         ))}
-        {img.url && (
+        {/* {img.url && (
           <div className="message own">
             <div className="texts">
               <img src={img.url} alt="" />
             </div>
+          </div>
+        )} */}
+        {fileData && (
+          <div className="message own">
+            {fileData.type.startsWith("image/") ? (
+              <div className="texts">
+                <img src={fileData.url} alt="" />
+              </div>
+            ) : (
+              <div className="texts">
+                <p>
+                  Ready to send:{" "}
+                  <span style={{ color: "black", fontStyle: "italic" }}>
+                    {fileData.name} - {fileData.size} KB
+                  </span>
+                </p>
+                <a href={fileData.url} download={fileData.name}>
+                  Preview File
+                </a>
+              </div>
+            )}
           </div>
         )}
         <div ref={endRef} />
@@ -204,13 +282,20 @@ const Chat = () => {
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
-            <img src="./img.png" alt="" />
+            <img
+              data-tooltip-id="img"
+              data-tooltip-content="Add a file"
+              data-tooltip-place="top"
+              src="./img.png"
+              alt=""
+            />
+            <Tooltip id="img" />
           </label>
           <input
             type="file"
             id="file"
             style={{ display: "none" }}
-            onChange={handleImg}
+            onChange={handleFile}
           />
           <img src="./camera.png" alt="" />
           <img src="./mic.png" alt="" />
@@ -220,6 +305,7 @@ const Chat = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={
             isCurrentUserBlocked || isReceiverBlocked
               ? "You cannot send a message"

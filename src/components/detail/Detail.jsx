@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 
 const Detail = () => {
   const [displayPhotos, setDisplayPhotos] = useState(false);
+  const [displayFiles, setDisplayFiles] = useState(false);
   const { currentUser } = useUserStore();
   const { chatId, user, changeBlock, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
@@ -45,7 +46,8 @@ const Detail = () => {
     if (!chatId) return; // Return early if chatId is null or undefined
 
     const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
-      const messagesWithImg = res.data().messages.filter((msg) => msg.img);
+      const messagesWithImg = res.data().messages;
+      console.log(messagesWithImg);
       setMessages(messagesWithImg);
       //console.log(messages);
       //console.log(messagesWithImg);
@@ -88,6 +90,10 @@ const Detail = () => {
 
   const togglePhotos = () => {
     setDisplayPhotos((prev) => !prev);
+  };
+
+  const toggleFiles = () => {
+    setDisplayFiles((prev) => !prev);
   };
   return (
     <div className="detail">
@@ -169,26 +175,55 @@ const Detail = () => {
               <img src="./download.png" alt="" className="icon" />
             </div> */}
             {messages &&
-              messages.map((message, index) => (
-                <div className="photoItem" key={index}>
-                  <div className="photoDetail">
-                    <img src={message.img} alt="" />
-                    <span>{getFileNameFromFirebaseUrl(message.img)}</span>
-                  </div>
-                  <img
-                    src="./download.png"
-                    alt=""
-                    className="icon"
-                    onClick={() => handleDownload(message.img)}
-                  />
-                </div>
-              ))}
+              messages.map(
+                (message, index) =>
+                  message.img && (
+                    <div className="photoItem" key={index}>
+                      <div className="photoDetail">
+                        <img src={message.img} alt="" />
+                        <span>{getFileNameFromFirebaseUrl(message.img)}</span>
+                      </div>
+                      <img
+                        src="./download.png"
+                        alt=""
+                        className="icon"
+                        onClick={() => handleDownload(message.img)}
+                      />
+                    </div>
+                  )
+              )}
           </div>
         </div>
         <div className="option">
           <div className="title">
             <span>Shared Files</span>
-            <img src="./arrowUp.png" alt="" />
+            <img
+              src={displayFiles ? "./arrowDown.png" : "/arrowUp.png"}
+              alt=""
+              onClick={() => toggleFiles()}
+            />
+          </div>
+          <div
+            className="files"
+            style={{ display: displayFiles ? "block" : "none" }}
+          >
+            {messages &&
+              messages.map(
+                (message, index) =>
+                  message.file && (
+                    <div className="fileItem">
+                      <a
+                        style={{
+                          color: "darkgrey",
+                        }}
+                        href={message.file}
+                        download={message.fileName}
+                      >
+                        {message.fileName}
+                      </a>
+                    </div>
+                  )
+              )}
           </div>
         </div>
       </div>
