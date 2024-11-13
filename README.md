@@ -63,5 +63,26 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
 
 (https://firebase.google.com/docs/storage/web/download-files#cors_configuration)
 
-### Detail explanation
+### Deploy using HEROKU
+
+1. In your pc, download and install the Heroku CLI.
+
+2. In Heroku website, create an app named 'ryandev-chatting-app'
+
+3. CMD => type: heroku login
+
+4. In your IDE (mine is VScode) > Terminal > type: git push heroku main
+
+   ![image](https://github.com/user-attachments/assets/4501d890-7d5a-4584-9801-3f76cb295793)
+
+   ![image](https://github.com/user-attachments/assets/03f12ca4-e4c1-4c26-a0aa-eee102ff95c8)
+
+5. Go to your app > Settings, if you have .env file, go to Config Vars > Show Config Vars > add key-value in here. Forget this step, you can not authenticate your app properly. 
+
+   ![image](https://github.com/user-attachments/assets/02a425a3-a9b8-4810-a3a9-a68beacac133)
+
+6. Now your app is hosted in Heroku, use Heroku Git URL to access your published app. Have fun ! 😎😁❤
+
+
+
 
