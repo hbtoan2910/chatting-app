@@ -81,7 +81,23 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
 
    ![image](https://github.com/user-attachments/assets/02a425a3-a9b8-4810-a3a9-a68beacac133)
 
-6. Now your app is hosted in Heroku, use Heroku Git URL to access your published app. Have fun ! 😎😁❤
+6. To stop all dynos (effectively turning off the app), scale the web dynos down to 0:
+
+   heroku ps:scale web=0 --app <app-name> => in my case: heroku ps:scale web=0 --app ryandev-chatting-app
+
+   ![image](https://github.com/user-attachments/assets/4dbda06a-ec68-499b-85d4-8f8390c7d070)
+
+
+8. To start the app again, scale the web dynos back up (e.g., to 1):
+
+   heroku ps:scale web=1 --app <app-name> => in my case:  heroku ps:scale web=1 --app ryandev-chatting-app
+
+   ![image](https://github.com/user-attachments/assets/1b16abc4-c2ff-4563-b56a-68c9010a5d17)
+
+   ![image](https://github.com/user-attachments/assets/973cf472-4cd8-4f64-afee-d2a40a502d70)
+
+
+9. Now your app is hosted in Heroku, use Heroku Git URL to access your published app. Have fun ! 😎😁❤
 
 
 
