@@ -8,13 +8,13 @@ import {
 import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
   });
-
   const [loading, setLoading] = useState(false);
 
   const handleAvatar = async (e) => {
@@ -47,7 +47,15 @@ const Login = () => {
         chats: [],
       });
 
-      toast.success("Account created. You can login now.");
+      toast.success("Account created. You can login now.", {
+        onClose: () => {
+          e.target.reset(); // Clear all fields in the form
+          setAvatar({
+            file: null,
+            url: "",
+          });
+        },
+      });
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -72,7 +80,12 @@ const Login = () => {
       // auth object comes from Firebase Authentication, and it automatically manages the user's authentication state,
       // including storing session-related data in the browser's storage (typically in localStorage or sessionStorage).
 
-      toast.success(`User with email ${email} logged in properly.`);
+      toast.success(`User with email ${email} logged in properly.`, {
+        onClose: () => {
+          // Reload the page after the toast has been displayed
+          window.location.reload();
+        },
+      });
     } catch (err) {
       console.error("Error logging in:", err.message);
       toast.error(err.message);
@@ -132,6 +145,7 @@ const Login = () => {
             )}
           </button>
         </form>
+        {/* <Link to="/chat">Move to Chat page</Link> */}
       </div>
     </div>
   );

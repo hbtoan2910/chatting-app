@@ -20,8 +20,10 @@ function App() {
   const { chatId } = useChatStore();
 
   useEffect(() => {
-    const unSub = onAuthStateChanged(auth, (user) => {
-      fetchUserInfo(user?.uid);
+    const unSub = onAuthStateChanged(auth, async (user) => {
+      console.log("Before Fetch: currentUser =", currentUser);
+      await fetchUserInfo(user?.uid);
+      console.log("After Fetch: currentUser =", currentUser);
     });
 
     return () => {
@@ -29,12 +31,18 @@ function App() {
     };
   }, [fetchUserInfo]);
 
-  if (isLoading) return <div className="loading">loading...</div>;
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
 
+  if (isLoading) {
+    console.log("Loading state active");
+    return <div className="loading">loading...</div>;
+  }
   return (
-    <Router>
-      <div className="container">
-        {/* {currentUser ? (
+    // <Router>
+    <div className="container">
+      {currentUser ? (
         <>
           <List />
           {chatId && <Chat />}
@@ -43,13 +51,11 @@ function App() {
       ) : (
         <Login />
       )}
-      <Notification /> */}
-        <Switch>
-          {/* Redirect to /chat after login if chatId exists */}
+      <Notification />
+      {/* <Switch>
           <Route path="/" exact>
-            {currentUser ? <Redirect to="/chat" /> : <Login />}
+            <Login />
           </Route>
-          {/* Route for /chat page */}
           <Route path="/chat">
             {currentUser ? (
               <>
@@ -58,16 +64,12 @@ function App() {
                 {chatId && <Detail />}
               </>
             ) : (
-              <Redirect to="/" />
+              <Login />
             )}
           </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-        </Switch>
-        <Notification />
-      </div>
-    </Router>
+        </Switch> */}
+    </div>
+    // </Router>
   );
 }
 

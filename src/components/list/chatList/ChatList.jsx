@@ -16,9 +16,11 @@ const ChatList = () => {
   const { changeChat } = useChatStore();
 
   useEffect(() => {
+    if (!currentUser?.id) return;
+
     //onSnapshot creates a REALTIME listener on 'userchats' collection
     const unsub = onSnapshot(
-      doc(db, "userchats", currentUser.id),
+      doc(db, "userchats", currentUser?.id),
       async (res) => {
         const items = res.data().chats;
 
@@ -39,7 +41,7 @@ const ChatList = () => {
     return () => {
       unsub();
     };
-  }, [currentUser.id]);
+  }, [currentUser?.id]);
 
   const handleSelect = async (chat) => {
     const userChats = chats.map((item) => {
@@ -108,7 +110,7 @@ const ChatList = () => {
           <p>Hello</p>
         </div>
       </div> */}
-      {filteredChats.map((chat) => (
+      {filteredChats?.map((chat) => (
         <div
           className="item"
           key={chat.chatId}
@@ -119,7 +121,7 @@ const ChatList = () => {
         >
           <img
             src={
-              chat.user.blocked.includes(currentUser.id)
+              chat.user.blocked.includes(currentUser?.id)
                 ? "./avatar.png"
                 : chat.user.avatar
             }
@@ -128,7 +130,7 @@ const ChatList = () => {
           <div className="texts">
             <span>
               {chat.user.blocked.includes(
-                currentUser.id ? "User" : chat.user.username
+                currentUser?.id ? "User" : chat.user.username
               )}
             </span>
             <p>{chat.lastMessage}</p>
