@@ -75,7 +75,7 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
 
    ![image](https://github.com/user-attachments/assets/4501d890-7d5a-4584-9801-3f76cb295793)
 
-   ![image](https://github.com/user-attachments/assets/03f12ca4-e4c1-4c26-a0aa-eee102ff95c8)
+   ![image](https://github.com/user-attachments/assets/1d63e7bd-02ca-4239-94f8-0713daa32c8f)
 
 5. Go to your app > Settings, if you have .env file, go to Config Vars > Show Config Vars > add key-value in here. Forget this step, you can not authenticate your app properly. 
 
@@ -97,7 +97,9 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
    ![image](https://github.com/user-attachments/assets/973cf472-4cd8-4f64-afee-d2a40a502d70)
 
 
-9. Now your app is hosted in Heroku, use Heroku Git URL to access your published app. Have fun ! 😎😁❤
+9. Now your app is hosted in Heroku, access Settings > Domain > URL to access your published app.
+   Your app can be found at https://ryandev-chatting-app-d31198ec0357.herokuapp.com/
+   Have fun ! 😎😁❤
 
 
 
