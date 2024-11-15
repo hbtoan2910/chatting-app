@@ -54,7 +54,7 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if (text === "") {
+    if (text === "" && !fileData) {
       toast.warning("You have to enter message.");
       return;
     }
@@ -243,7 +243,7 @@ const Chat = () => {
                   {message.fileName}
                 </a>
               )}
-              <p>{message.text}</p>
+              {message.text != "" && <p>{message.text}</p>}
               <span>{format(message.createdAt.toDate())}</span>
               {/* The reason message.createdAt.toDate() works in this code is because createdAt is likely a Firestore Timestamp object, not a native JavaScript Date */}
             </div>

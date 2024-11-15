@@ -27,10 +27,23 @@
 }
 .icons {
   display: flex;
+  align-items: center;
   gap: 20px;
 
   img {
     width: 20px;
     height: 20px;
   }
+}
+.logout {
+  padding: 10px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #2e84f5;
 }

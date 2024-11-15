@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./login.css";
 import { toast } from "react-toastify";
 import {
@@ -8,14 +8,14 @@ import {
 import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
 
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
@@ -26,14 +26,24 @@ const Login = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault(); //prevent page reloading after submitting the form
-    setLoading(true);
+    setRegisterLoading(true);
 
     const formData = new FormData(e.target);
     const { username, email, password } = Object.fromEntries(formData);
 
+    // Check if an avatar file is uploaded
+    if (!avatar.file) {
+      toast.error("Please upload an avatar.");
+      setRegisterLoading(false);
+      return;
+    }
+
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const imgUrl = await upload(avatar.file, "avatars");
+      if (!imgUrl) {
+        toast.warning("Failed to upload avatar.");
+      }
 
       await setDoc(doc(db, "users", res.user.uid), {
         username,
@@ -60,13 +70,13 @@ const Login = () => {
       console.log(err);
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setRegisterLoading(false);
     }
   };
 
   const handleLogIn = async (e) => {
     e.preventDefault(); //prevent page reloading after submitting the form
-    setLoading(true);
+    setLoginLoading(true);
 
     const formData = new FormData(e.target);
     const { email, password } = Object.fromEntries(formData);
@@ -81,16 +91,16 @@ const Login = () => {
       // including storing session-related data in the browser's storage (typically in localStorage or sessionStorage).
 
       toast.success(`User with email ${email} logged in properly.`, {
-        onClose: () => {
-          // Reload the page after the toast has been displayed
-          window.location.reload();
-        },
+        // onClose: () => {
+        //   // Reload the page after the toast has been displayed
+        //   window.location.reload();
+        // },
       });
     } catch (err) {
       console.error("Error logging in:", err.message);
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setLoginLoading(false);
     }
   };
 
@@ -102,8 +112,8 @@ const Login = () => {
         <form id="loginForm" onSubmit={handleLogIn}>
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={loading}>
-            {loading ? (
+          <button disabled={loginLoading}>
+            {loginLoading ? (
               <>
                 <span className="spinner" />
                 <span>loading</span>
@@ -134,8 +144,8 @@ const Login = () => {
           <input type="text" placeholder="Username" name="username" />
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={loading}>
-            {loading ? (
+          <button disabled={registerLoading}>
+            {registerLoading ? (
               <>
                 <span className="spinner" />
                 <span>loading</span>

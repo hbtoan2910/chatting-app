@@ -33,3 +33,22 @@ body {
   border-radius: 10px;
   background-color: rgba(17, 25, 40, 0.9);
 }
+
+/* Media Query for iPhone 16 Pro Max (430x932) */
+@media screen and (max-width: 430px) and (max-height: 932px) {
+  body {
+    background-image: url("/public/tile\ bg.jpg"); /* Optional: A different background */
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  .container {
+    max-width: 400px; /* Use more screen width for better fit */
+    max-height: 900px; /* Slightly reduce height */
+    border-radius: 8px;
+  }
+
+  .loading {
+    padding: 20px;
+    font-size: 24px; /* Adjust font size */
+  }
+}

@@ -31,9 +31,9 @@ function App() {
     };
   }, [fetchUserInfo]);
 
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   console.log(currentUser);
+  // }, [currentUser]);
 
   if (isLoading) {
     console.log("Loading state active");
