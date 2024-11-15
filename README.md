@@ -63,5 +63,44 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
 
 (https://firebase.google.com/docs/storage/web/download-files#cors_configuration)
 
-### Detail explanation
+### Deploy using HEROKU
+
+1. In your pc, download and install the Heroku CLI.
+
+2. In Heroku website, create an app named 'ryandev-chatting-app'
+
+3. CMD => type: heroku login
+
+4. In your IDE (mine is VScode) > Terminal > type: git push heroku main
+
+   ![image](https://github.com/user-attachments/assets/4501d890-7d5a-4584-9801-3f76cb295793)
+
+   ![image](https://github.com/user-attachments/assets/1d63e7bd-02ca-4239-94f8-0713daa32c8f)
+
+5. Go to your app > Settings, if you have .env file, go to Config Vars > Show Config Vars > add key-value in here. Forget this step, you can not authenticate your app properly. 
+
+   ![image](https://github.com/user-attachments/assets/02a425a3-a9b8-4810-a3a9-a68beacac133)
+
+6. To stop all dynos (effectively turning off the app), scale the web dynos down to 0:
+
+   heroku ps:scale web=0 --app <app-name> => in my case: heroku ps:scale web=0 --app ryandev-chatting-app
+
+   ![image](https://github.com/user-attachments/assets/4dbda06a-ec68-499b-85d4-8f8390c7d070)
+
+
+8. To start the app again, scale the web dynos back up (e.g., to 1):
+
+   heroku ps:scale web=1 --app <app-name> => in my case:  heroku ps:scale web=1 --app ryandev-chatting-app
+
+   ![image](https://github.com/user-attachments/assets/1b16abc4-c2ff-4563-b56a-68c9010a5d17)
+
+   ![image](https://github.com/user-attachments/assets/973cf472-4cd8-4f64-afee-d2a40a502d70)
+
+
+9. Now your app is hosted in Heroku, access Settings > Domain > URL to access your published app.
+   Your app can be found at https://ryandev-chatting-app-d31198ec0357.herokuapp.com/
+   Have fun ! 😎😁❤
+
+
+
 
