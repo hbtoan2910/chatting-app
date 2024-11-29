@@ -63,6 +63,17 @@ Run: gsutil cors set cors.json gs://<your-cloud-storage-bucket> to deploy these 
 
 (https://firebase.google.com/docs/storage/web/download-files#cors_configuration)
 
+🔴 Error & Solution:
+
+In Firestore db, check rule, if  you see rule like this: allow read, write: if request.time < timestamp.date(2024, 11, 29) -->
+
+This rule means that read and write operations are only allowed before a specific date (November 29, 2024). Essentially, after this date, no one (even authenticated users) will be able to read from or write to the Firestore database.
+
+🟢 We have to update new rule to allow access (simple rule like below works fine)
+
+![image](https://github.com/user-attachments/assets/e6d5cb11-2bfe-4536-a1d2-aa230e2b655c)
+
+
 ### Deploy using HEROKU
 
 1. In your pc, download and install the Heroku CLI.
